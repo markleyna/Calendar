@@ -1,0 +1,231 @@
+// Zeller Homework
+// Nicole Markley
+// 2/12/15
+// Honors CP3 Bell 3
+// Purpose: From a date create a monthly calendar.
+
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <windows.h>
+
+int main(){
+	using namespace std;
+	int response;
+	int f, l, day_count, holidays[7] = {0}, c, d;
+	int k;
+	int m, m2;
+	int D;
+	int C;
+	c = 0;
+	d = 0;
+	// Output menu
+	do{
+		std::cout << "Enter 1 to run program, 0 to stop. ";
+		cin >> response;
+		if(response == 1){
+			c = 0;
+			// Get data
+			std::cout << "Enter the date like XX_XX_XXXX ";
+			cin >> m;
+			cin >> k; 
+			cin >> C;
+			D = C - (int(C/100) * 100);
+			C = C / 100;
+}
+		// Find the last day of the month
+			switch(m){
+			case 1:
+			case 3:
+			case 5:
+			case 7:
+			case 8:
+			case 10:
+			case 12:
+				l = 31;
+				break;
+			case 4:
+			case 6:
+			case 9:
+			case 11:
+				l = 30;
+				break;
+			case 2:
+				if(D == 0 && C % 4 == 0){
+					l = 29;
+				}
+				if(D == 0 && C % 4 != 0){
+					l = 28;
+				}
+				if(D != 0 && D % 4 == 0){
+					l = 29;
+				}
+				if(D != 0 && D % 4 != 0){
+					l = 28;
+				}
+			}
+
+			//Check if the month is Jan or Feb and adjust
+			switch(m){
+			case 1:
+			case 2:
+				if(D == 0){
+					C = C - 1;
+					D = 99;
+				};
+				if(D != 0){
+					D = D - 1;
+				};
+				m = m + 10;
+				break;
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
+			case 10:
+			case 11:
+			case 12:
+					m = m - 2;
+			};
+			
+			holidays[c] = k;
+			c++;
+
+			// Calculate day of the week for the first day of the month
+			f = 1  + D  + 5 * C;
+			m2 = (13 * m - 1) / 5;
+			D = D/4;
+			C = C/4;
+			f = f + m2 + D + C;
+			if(f > 7){
+				f = f - 7 * (int(f / 7));
+			};
+			
+			if(f == 0){
+				f = 7;
+			}
+			// Test for holidays
+			std::cout << endl;
+			if(m == 11){
+				holidays[c] = 1;
+				c++;
+				std::cout << "1 New Year Day" << endl;
+				holidays[c] = 14 + (1 + (8-f));
+				std::cout << holidays[c] << " Martin Luther King Jr. Day" << endl;
+				c++;
+			}
+			else if(m == 12){
+				holidays[c] = 14;
+				std::cout << "14 Valentine's Day" << endl;
+				c++;
+				holidays[c] = 2;
+				std::cout << "2 Groundhog Day" << endl;
+				c++;
+				holidays[c] = 14 + (1 + (8-f));
+				std::cout << holidays[c] << " Presidents' Day" << endl;
+				c++;
+			}
+			else if(m == 1){
+				holidays[c] = 17;
+				std::cout << "17 St. Patrick's Day" << endl;
+				c++;
+			}
+			else if(m == 2){
+				holidays[c] = 22;
+				std::cout << "22 Earth Day" << endl;
+				c++;
+			}
+			else if(m == 3){
+				holidays[c] = 7 + (1 + (7-f));
+				std::cout << holidays[c] << " Mother's Day" << endl;
+				c++;
+			}
+			else if(m == 4){
+				holidays[c] = 14 + (1 + (7-f));
+				std::cout << holidays[c] << " Father's Day" << endl;
+				c++;
+			}
+			else if(m == 5){
+				holidays[c] = 4;
+				std::cout << "4 Independence Day" << endl;
+				c++;
+			}
+			else if(m == 7){
+				holidays[c] = 11;
+				std::cout << "11 Patriot Day" << endl;
+				c++;
+				holidays[c] = 1 + (8-f);
+				std::cout << holidays[c] << " Labor Day" << endl;
+				c++;
+			}
+			else if(m == 8){
+				holidays[c] = 31;
+				std::cout << "31 Halloween" << endl;
+				c++;
+				holidays[c] = 7 + (1 + (8-f));
+				std::cout << holidays[c] << " Columbus Day" << endl;
+				c++;
+			}
+			else if(m == 9){
+				holidays[c] = 11;
+				std::cout << "11 Veteran's Day" << endl;
+				c++;
+				holidays[c] = 21 + (1 + (11-f));
+				std::cout << holidays[c] << " Thanksgiving" << endl;
+				c++;
+			}
+			else if(m == 10){
+				holidays[c] = 31;
+				std::cout << "31 New Year's Eve" << endl;
+				c++;
+				holidays[c] = 24;
+				std::cout << "24 Christmas Eve" << endl;
+				c++;
+				holidays[c] = 25;
+				std::cout << "25 Christmas" << endl;
+				c++;
+			}
+			if(f == 7){
+				f = 0;
+			}
+			
+			// Output the calendar
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+			std::cout << "S  M  T  W  T  F  S " << endl;
+			day_count = 1;
+			for(int i = 0; i < f; i++){
+				std::cout << "   ";
+			};
+			for(int i = f; i < l + f; i++){
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+				for(int z = 0; z < 4; z++){
+					if(holidays[z] == day_count){
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
+						break;
+					}
+				}
+				if(i % 7 == 0){
+					std::cout << endl;
+				};
+				if(day_count < 10){
+					std::cout << day_count << "  ";
+
+					day_count++;
+				}
+				else if(day_count >= 10){
+					std::cout << day_count << " ";
+					day_count++;
+				}
+			}
+			std::cout << endl;
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+			for(int t = 0; t <= 6; t++){
+				holidays[t] = 0;
+			}
+	}while(response != 0);
+
+	return 0;
+}
